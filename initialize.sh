@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SHM_MEMORY=64
+PKG_MEMORY=8
+
 PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
 PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
 DB_ADDRESS=$(consul kv get backend/db_address)
@@ -18,13 +21,15 @@ sed -i.backup "s/{{ KAM_PUBLIC_IP }}/$PUBLIC_IP/g" /etc/kamailio/definitions.cfg
 echo "alias=$PUBLIC_IP" >> aliases.cfg
 echo "alias=$PRIVATE_IP" >> aliases.cfg
 
-echo "RUN_KAMAILIO=yes" >> /etc/default/kamailio
-echo "SHM_MEMORY=64" >> /etc/default/kamailio
-echo "PKG_MEMORY=8" >> /etc/default/kamailio
-echo "CFGFILE=/etc/kamailio/kamailio.cfg" >> /etc/default/kamailio
-echo "USER=kamailio" >> /etc/default/kamailio
-echo "GROUP=kamailio" >> /etc/default/kamailio
 
+
+# Set vars in startup file
+sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY//g" /etc/kamailio/kamailio.service > /etc/systemd/system/multi-user.target.wants/kamailio.service
+
+# Copy kamailio default's file
+cp /etc/kamailio/kamailio.default /etc/default/kamailio
+
+# Configure consul's template (dispatcher)
 consul-template -template="/etc/kamailio/dispatcher.list.tpl:/etc/kamailio/dispatcher.list:/usr/sbin/kamcmd dispatcher.reload" -once 2> /dev/null
 
 SIP_DOMAIN=$(consul kv get voice/sip_domain 2> /dev/null) && if [[ "$?" -eq "0" ]]; then echo "alias=$SIP_DOMAIN" >> aliases.cfg; fi

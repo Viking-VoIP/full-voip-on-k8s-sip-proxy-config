@@ -1,0 +1,6 @@
+RUN_KAMAILIO=yes
+SHM_MEMORY=64
+PKG_MEMORY=8
+CFGFILE=/etc/kamailio/kamailio.cfg
+USER=kamailio
+GROUP=kamailio
