@@ -24,11 +24,9 @@ sed -i.backup "s/{{ KAM_PUBLIC_IP }}/$PUBLIC_IP/g" /etc/kamailio/definitions.cfg
 echo "alias=$PUBLIC_IP" >> aliases.cfg
 echo "alias=$PRIVATE_IP" >> aliases.cfg
 
-
-
 # Set vars in startup file
-sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY//g" /etc/kamailio/kamailio.service > /etc/systemd/system/multi-user.target.wants/kamailio.service
-sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY//g" /etc/kamailio/kamailio.default > /etc/default/kamailio
+sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY/g" /etc/kamailio/kamailio.service > /etc/systemd/system/multi-user.target.wants/kamailio.service
+sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY/g" /etc/kamailio/kamailio.default > /etc/default/kamailio
 
 # Copy kamailio default's file
 cp /etc/kamailio/kamailio.default /etc/default/kamailio
