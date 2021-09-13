@@ -53,3 +53,4 @@ CFGFILE=/etc/kamailio/kamailio.cfg
 ' > /etc/default/kamailio
 service kamailio start
 #/usr/sbin/kamailio -P /var/run/kamailio/kamailio.pid -f $CFGFILE -m $SHM_MEMORY -M $PKG_MEMORY -u $USER -g $GROUP -DD -E
+exit 0
