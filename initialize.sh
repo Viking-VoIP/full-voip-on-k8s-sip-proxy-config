@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SHM_MEMORY=64
-PKG_MEMORY=8
+SHM_MEMORY=128
+PKG_MEMORY=16
 
 PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
 PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
