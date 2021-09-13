@@ -28,9 +28,6 @@ echo "alias=$PRIVATE_IP" >> aliases.cfg
 sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY/g" /etc/kamailio/kamailio.service > /etc/systemd/system/multi-user.target.wants/kamailio.service
 sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY/g" /etc/kamailio/kamailio.default > /etc/default/kamailio
 
-# Copy kamailio default's file
-cp /etc/kamailio/kamailio.default /etc/default/kamailio
-
 # Configure consul's template (dispatcher)
 consul-template -template="/etc/kamailio/dispatcher.list.tpl:/etc/kamailio/dispatcher.list:/usr/sbin/kamcmd dispatcher.reload" -once 2> /dev/null
 
