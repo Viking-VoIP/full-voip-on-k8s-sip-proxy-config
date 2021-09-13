@@ -3,6 +3,9 @@
 SHM_MEMORY=128
 PKG_MEMORY=16
 
+echo "SHM_MEMORY: $SHM_MEMORY"
+echo "PKG_MEMORY: $PKG_MEMORY"
+
 PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
 PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
 DB_ADDRESS=$(consul kv get backend/db_address)
@@ -25,6 +28,7 @@ echo "alias=$PRIVATE_IP" >> aliases.cfg
 
 # Set vars in startup file
 sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY//g" /etc/kamailio/kamailio.service > /etc/systemd/system/multi-user.target.wants/kamailio.service
+sed "s/{{ SHM_MEMORY }}/$SHM_MEMORY/g; s/{{ PKG_MEMORY }}/$PKG_MEMORY//g" /etc/kamailio/kamailio.default > /etc/default/kamailio
 
 # Copy kamailio default's file
 cp /etc/kamailio/kamailio.default /etc/default/kamailio
