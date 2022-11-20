@@ -33,9 +33,15 @@ consul-template -template="/etc/kamailio/dispatcher.list.tpl:/etc/kamailio/dispa
 
 SIP_DOMAIN=$(consul kv get voice/sip_domain 2> /dev/null) && if [[ "$?" -eq "0" ]]; then echo "alias=$SIP_DOMAIN" >> aliases.cfg; fi
 
-kamdbctl create 2> /dev/null
+if [ "$(echo "show databases like '%kamailio%';" | mysql -u $DB_USER -p$DB_PASS -h $DB_ADDRESS -N | wc -l)" -eq "1" ]; then 
+  echo "database kamailio already exists.. not createing it."
+else 
+  kamdbctl create 2> /dev/null
+fi
 
 supervisorctl start consul_watcher
+
+service kamailio start 
 
 #echo '
 ##
