@@ -8,6 +8,7 @@ echo "PKG_MEMORY: $PKG_MEMORY"
 
 until [ "$(consul members | wc -l)" -ge "7" ]; do 
   echo "Waiting for all pods to be running (7)..."
+  sleep 30
 done
 
 PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
