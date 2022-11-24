@@ -11,7 +11,7 @@ until [ "$(consul members | wc -l)" -ge "7" ]; do
   sleep 30
 done
 
-until [[ !-z "$PUBLIC_IP" || !-z "$PRIVATE_IP" || !-z "$DB_ADDRESS" || !-z "$DB_USER" || !-z "$DB_PASS ]]; do
+until [[ ! -z "$PUBLIC_IP" || ! -z "$PRIVATE_IP" || ! -z "$DB_ADDRESS" || ! -z "$DB_USER" || ! -z "$DB_PASS" ]]; do
   PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
   PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
   DB_ADDRESS=$(consul kv get backend/db_address)
