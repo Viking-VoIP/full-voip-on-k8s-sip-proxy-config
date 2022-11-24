@@ -6,6 +6,10 @@ PKG_MEMORY=16
 echo "SHM_MEMORY: $SHM_MEMORY"
 echo "PKG_MEMORY: $PKG_MEMORY"
 
+until [ "$(consul members | wc -l)" -ge "7" ]; do 
+  echo "Waiting for all pods to be running (7)..."
+done
+
 PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
 PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
 DB_ADDRESS=$(consul kv get backend/db_address)
