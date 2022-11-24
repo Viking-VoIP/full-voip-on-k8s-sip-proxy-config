@@ -11,12 +11,15 @@ until [ "$(consul members | wc -l)" -ge "7" ]; do
   sleep 30
 done
 
-PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
-PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
-DB_ADDRESS=$(consul kv get backend/db_address)
-DB_USER=$(consul kv get backend/db_user)
-DB_PASS=$(consul kv get backend/db_pass)
-LOCAL_SUBSCRIBER_REGEXP=$(consul kv get voice/local_subscribers_regexp)
+until [[ !-z "$PUBLIC_IP" || !-z "$PRIVATE_IP" || !-z "$DB_ADDRESS" || !-z "$DB_USER" || !-z "$DB_PASS ]]; do
+  PUBLIC_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/public-ipv4)
+  PRIVATE_IP=$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)
+  DB_ADDRESS=$(consul kv get backend/db_address)
+  DB_USER=$(consul kv get backend/db_user)
+  DB_PASS=$(consul kv get backend/db_pass)
+  LOCAL_SUBSCRIBER_REGEXP=$(consul kv get voice/local_subscribers_regexp)
+done
+  
 
 sed -i.backup "s/{{ DBHOST }}/$DB_ADDRESS/g" /etc/kamailio/definitions.cfg /etc/kamailio/kamctlrc
 sed -i.backup "s/{{ DBUSER }}/$DB_USER/g" /etc/kamailio/definitions.cfg /etc/kamailio/kamctlrc
