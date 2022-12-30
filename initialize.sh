@@ -6,8 +6,8 @@ PKG_MEMORY=16
 echo "SHM_MEMORY: $SHM_MEMORY"
 echo "PKG_MEMORY: $PKG_MEMORY"
 
-until [ "$(consul members | wc -l)" -ge "7" ]; do 
-  echo "Waiting for all pods to be running (7)..."
+until [ "$(consul members | wc -l)" -ge "5" ]; do 
+  echo "Waiting for all pods to be running (5)..."
   sleep 30
 done
 
